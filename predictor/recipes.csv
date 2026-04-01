@@ -1,0 +1,25 @@
+dish,ingredients
+idli,rice|lentil|water
+dosa,rice|lentil|oil
+masala dosa,rice|lentil|potato|onion|oil
+pongal,rice|lentil|ghee|pepper
+sambar,lentil|onion|tomato|vegetables|spices
+chapati,flour|water
+paratha,flour|oil|butter
+butter naan,flour|butter|milk
+dal makhani,lentil|butter|cream|spices
+rajma masala,beans|onion|tomato|oil
+chole,chickpea|onion|tomato|oil
+paneer butter masala,cheese|butter|cream|tomato
+palak paneer,spinach|cheese|oil
+chicken curry,chicken|onion|tomato|oil
+butter chicken,chicken|butter|cream|tomato
+egg curry,egg|onion|tomato|oil
+fish curry,fish|onion|tomato|oil
+chicken biryani,chicken|rice|onion|oil|spices
+veg fried rice,rice|carrot|beans|onion|oil
+pizza,flour|cheese|tomato|oil
+burger,beef|bread|cheese|onion
+omelette,egg|oil|onion
+salad,lettuce|tomato|cucumber|olive oil
+vegetable soup,carrot|beans|onion|water

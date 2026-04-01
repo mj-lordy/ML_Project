@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Eco Plate</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: radial-gradient(circle at center, #1e6b4c, #0f3d2e);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card {
+            width: 680px;
+            padding: 30px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        h1 {
+            margin: 0;
+            color: #2e7d5a;
+            font-size: 32px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        .buttons {
+            margin-bottom: 20px;
+        }
+
+        .buttons button {
+            padding: 12px 20px;
+            margin: 5px;
+            border-radius: 10px;
+            border: none;
+            background: linear-gradient(145deg, #2ecc71, #1e8449);
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .buttons button:hover {
+            transform: scale(1.05);
+        }
+
+        .input-box {
+            display: none;
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 90%;
+            padding: 10px;
+            margin: 6px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+
+        .predict {
+            background: #2e7d5a;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .predict:hover {
+            background: #1e5c45;
+        }
+
+        .result {
+            margin-top: 15px;
+            font-weight: bold;
+            color: #2e7d5a;
+        }
+
+        .ingredients-card {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 15px;
+            background: #f4f4f4;
+            color: #333;
+            display: none;
+        }
+
+        .ingredients-card h3 {
+            margin-bottom: 15px;
+            color: #2e7d5a;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+        }
+
+        th {
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+
+    <h1>🌱 Eco Plate</h1>
+    <div class="subtitle">Carbon Footprint Estimator</div>
+
+    <div class="buttons">
+        <button onclick="showDish()">Dish Name</button>
+        <button onclick="showManual()">Ingredients</button>
+    </div>
+
+    <!-- Dish Input -->
+    <div id="dishInput" class="input-box">
+        <input type="text" id="dish" placeholder="Enter dish name (e.g., dosa)">
+        <button class="predict" onclick="predictDish()">Predict</button>
+    </div>
+
+    <!-- Manual Input -->
+    <div id="manualInput" class="input-box">
+        <input type="number" id="meat" placeholder="Meat Count">
+        <input type="number" id="dairy" placeholder="Dairy Count">
+        <input type="number" id="veg" placeholder="Vegetable Count">
+        <input type="number" id="grain" placeholder="Grain Count">
+        <input type="number" id="total" placeholder="Total Ingredients">
+        <button class="predict" onclick="predictCO2()">Predict</button>
+    </div>
+
+    <div class="result" id="resultBox"></div>
+
+    <!-- INGREDIENT TABLE -->
+    <div class="ingredients-card" id="ingredientsTable">
+        <h3>Ingredients & CO₂</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Ingredient</th>
+                    <th>Weight (g)</th>
+                    <th>CO₂ (kg)</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+    </div>
+
+</div>
+
+<script>
+
+function showDish() {
+    document.getElementById("dishInput").style.display = "block";
+    document.getElementById("manualInput").style.display = "none";
+}
+
+function showManual() {
+    document.getElementById("manualInput").style.display = "block";
+    document.getElementById("dishInput").style.display = "none";
+}
+
+function predictDish() {
+    let dish = document.getElementById("dish").value;
+
+    fetch(`/predict_dish/?dish=${dish}`)
+    .then(res => res.json())
+    .then(data => {
+
+        let box = document.getElementById("resultBox");
+
+        if (data.predicted_co2) {
+
+            box.innerHTML = "Total CO₂: " + data.predicted_co2;
+
+            let table = document.getElementById("ingredientsTable");
+            let body = document.getElementById("tableBody");
+
+            table.style.display = "block";
+            body.innerHTML = "";
+
+            let ingredients = data.ingredients;
+
+            const co2_map = {
+                chicken: 6,
+                beef: 27,
+                fish: 5,
+                egg: 4.5,
+                milk: 3,
+                cheese: 13,
+                butter: 12,
+                rice: 2.7,
+                wheat: 1.4,
+                flour: 1.4,
+                onion: 0.5,
+                tomato: 0.4,
+                potato: 0.3,
+                carrot: 0.4,
+                beans: 0.8,
+                oil: 6,
+                sugar: 3
+            };
+
+            ingredients.forEach(item => {
+
+                let weight = Math.floor(Math.random() * 150) + 50;
+                let factor = co2_map[item] || 1;
+                let co2 = ((weight / 1000) * factor).toFixed(2);
+
+                let row = `
+                    <tr>
+                        <td>${item}</td>
+                        <td>${weight}</td>
+                        <td>${co2}</td>
+                    </tr>
+                `;
+
+                body.innerHTML += row;
+            });
+
+        } else {
+            box.innerHTML = data.error;
+        }
+    });
+}
+
+function predictCO2() {
+    let meat = document.getElementById("meat").value;
+    let dairy = document.getElementById("dairy").value;
+    let veg = document.getElementById("veg").value;
+    let grain = document.getElementById("grain").value;
+    let total = document.getElementById("total").value;
+
+    fetch(`/predict/?meat_count=${meat}&dairy_count=${dairy}&veg_count=${veg}&grain_count=${grain}&total_ingredients=${total}`)
+    .then(res => res.json())
+    .then(data => {
+
+        let box = document.getElementById("resultBox");
+
+        if (data.predicted_co2) {
+            box.innerHTML = "Total CO₂: " + data.predicted_co2;
+        } else {
+            box.innerHTML = data.error;
+        }
+    });
+}
+
+</script>
+
+</body>
+</html>
