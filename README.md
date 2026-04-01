@@ -62,9 +62,7 @@ Power BI (for visualization)
 
 How to Run
 
-git clone https://github.com/mj-lordy/Eco-Plate.git
-
-cd Eco-Plate
+git clone https://github.com/mj-lordy/ML_Project.git
 
 python -m venv .venv
 .venv\Scripts\activate
