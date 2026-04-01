@@ -2,11 +2,7 @@ Eco-Plate: Carbon Footprint Prediction System
 
 Project Overview
 
-
-
 Eco-Plate is a Machine Learning-based web application that predicts the carbon footprint (CO₂ emissions) of food dishes based on their ingredients. The system helps promote sustainable food choices.
-
-
 
 Features
 
@@ -70,9 +66,12 @@ git clone https://github.com/mj-lordy/Eco-Plate.git
 
 cd Eco-Plate
 
+python -m venv .venv
+.venv\Scripts\activate
+
+pip install django pandas numpy scikit-learn xgboost joblib
+
 python manage.py runserver
-
-
 
 Objective
 
