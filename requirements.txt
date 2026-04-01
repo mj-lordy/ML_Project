@@ -118,7 +118,7 @@ notebook==7.4.5
 notebook_shim==0.2.4
 numpy==2.3.3
 onnx==1.20.0
-onnxruntime==1.23.2
+onnxruntime==1.24.4
 openpyxl==3.1.5
 orjson==3.11.7
 overrides==7.7.0
